@@ -6,16 +6,17 @@
 #define STIMATUCIL1_INPUTHANDLER_H
 
 #include <sstream>
-#include <random>
+#include <vector>
 
 using namespace std;
 
 /*
  * String to integer array. Converts a string to an array of integers.
  * It is ensured that the output always contains 4 integers.
+ * Could just use a single cin and then split the string, but this is more fun.
  * @param out The array to store the integers in.
  */
-int stoia(unsigned int out[4]) {
+int stoia(vector<int>& out) {
     string input;
     getline(cin >> ws, input);
     string const temp = input;
@@ -41,11 +42,11 @@ int stoia(unsigned int out[4]) {
     for (int i = 0; i < 4; i++) {
         int t;
         iss >> t;
-        if (t < 1 || t > 13) {
-            cerr << "Masukan tidak sesuai" << endl;
+        if (t < 2 || t > 10) {
+            cerr << "Masukan tidak sesuai. Hanya menerima (A, 2-10, J, Q, K)." << endl;
             return 1;
         }
-        out[i] = t;
+        out.push_back(t);
     }
     return 0;
 }
@@ -53,7 +54,7 @@ int stoia(unsigned int out[4]) {
 /*
  * Checks whether the user would like to input cards manually or randomly.
  */
-void fill_array(unsigned int out[4]) {
+void fill_array(vector<int>& out) {
     bool valid = false;
     do {
         cout << "Input manual atau random? (m/r): ";
@@ -70,7 +71,7 @@ void fill_array(unsigned int out[4]) {
             unsigned int card;
             __builtin_ia32_rdrand32_step(&card);
             for (int i = 0; i < 4; i++) {
-                out[i] = (card % 13) + 1;
+                out.push_back((card % 13) + 1);
                 __builtin_ia32_rdrand32_step(&card);
             }
             valid = true;
@@ -80,4 +81,4 @@ void fill_array(unsigned int out[4]) {
     } while (!valid);
 }
 
-#endif //STIMATUCIL1_INPUTHANDLER_H
+#endif

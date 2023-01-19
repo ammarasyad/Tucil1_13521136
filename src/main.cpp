@@ -1,34 +1,34 @@
 #include <iostream>
-#include "inputhandler.h"
 #include <chrono>
-
-#define ACE 1
-#define JACK 11
-#define QUEEN 12
-#define KING 13
-
-#define TARGET 24
+#include "inputhandler.h"
+#include "solver.h"
 
 using namespace std;
 
 int main() {
     // Step 1: Input
-    unsigned int out[4];
+    vector<int> out;
     fill_array(out);
 
-
-//    int result;
-//    do {
-//        result = stoia(out);
-//    } while(result != 0);
-
-    auto start = chrono::high_resolution_clock::now();
-
-    for (unsigned int i : out) {
-        cout << i << endl;
+    // Step 2: Ask if user wants to save to file
+    bool to_file;
+    char dump;
+    cout << "Apakah ingin di save ke file? (y/n): ";
+    cin >> dump;
+    if (dump == 'y') {
+        to_file = true;
+    } else {
+        if (dump != 'n') {
+            cout << "Input tidak valid. Program akan tidak akan save file." << endl;
+        }
+        to_file = false;
     }
 
-    auto duration = chrono::duration_cast<chrono::seconds>(chrono::high_resolution_clock::now() - start);
-    cout << "Time taken: " << duration.count() << " seconds" << endl;
+    // Step 3: Solve
+    auto start = chrono::high_resolution_clock::now();
+    solve(out, to_file);
+    auto duration = chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - start);
+
+    cout << "Time taken: " << duration.count() << " milliseconds" << endl;
     return 0;
 }
