@@ -15,5 +15,6 @@ using namespace std;
 void permutations(vector<vector<int>>& result, vector<int>& cards, int start, int end);
 vector<vector<int>> get_all_permutations(vector<int>& cards);
 void solve(vector<int>& permutation, bool to_file);
+void print_solutions();
 
 #endif

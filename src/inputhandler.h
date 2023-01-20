@@ -10,6 +10,11 @@
 
 using namespace std;
 
+#define ACE 1
+#define JACK 11
+#define QUEEN 12
+#define KING 13
+
 /*
  * String to integer array. Converts a string to an array of integers.
  * It is ensured that the output always contains 4 integers.
@@ -42,13 +47,36 @@ int stoia(vector<int>& out) {
     for (int i = 0; i < 4; i++) {
         int t;
         iss >> t;
-        if (t < 2 || t > 10) {
+        if (t < 1 || t > 13) {
             cerr << "Masukan tidak sesuai. Hanya menerima (A, 2-10, J, Q, K)." << endl;
             return 1;
         }
         out.push_back(t);
     }
     return 0;
+}
+
+ostream& operator<<(ostream& out, const vector<int>& cards) {
+    for (auto& i : cards) {
+        switch (i) {
+            case ACE:
+                out << "A ";
+                break;
+            case JACK:
+                out << "J ";
+                break;
+            case QUEEN:
+                out << "Q ";
+                break;
+            case KING:
+                out << "K ";
+                break;
+            default:
+                out << i << " ";
+                break;
+        }
+    }
+    return out;
 }
 
 /*
@@ -63,6 +91,7 @@ void fill_array(vector<int>& out) {
         transform(input.begin(), input.end(), input.begin(), ::tolower);
         if (input == "m") {
             int result;
+            cout << "Masukkan 4 kartu (A, 2-10, J, Q, K): ";
             do {
                 result = stoia(out);
             } while (result != 0);
@@ -75,6 +104,7 @@ void fill_array(vector<int>& out) {
                 __builtin_ia32_rdrand32_step(&card);
             }
             valid = true;
+            cout << "Nomor-nomor kartu: " << out << endl;
         } else {
             cout << "Masukan tidak sesuai" << endl;
         }

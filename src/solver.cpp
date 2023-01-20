@@ -6,6 +6,7 @@
 #include "solver.h"
 
 const vector<char> operators = {'+', '-', '*', '/'};
+vector<string> solutions;
 
 /*
  * Evaluates an expression.
@@ -36,7 +37,6 @@ float operate(const float& a, const char& op, const float& b) {
 void solve(vector<int>& cards, bool to_file = false) {
     int count = 1;
     vector<vector<int>> permutations = get_all_permutations(cards);
-    vector<string> solutions;
     for (auto& p : operators) {
         for (auto& q : operators) {
             for (auto& r : operators) {
@@ -128,10 +128,19 @@ void solve(vector<int>& cards, bool to_file = false) {
             }
         }
     }
+    if (solutions.empty()) {
+        cout << "Tidak ada solusi.";
+        if (to_file) {
+            cout << " Solusi tidak ditulis ke file.";
+        }
+        cout << endl;
+        return;
+    }
     if (to_file) {
         try {
             ofstream file("solutions.txt");
             if (file.is_open()) {
+                file << "Untuk input: " << cards[0] << " " << cards[1] << " " << cards[2] << " " << cards[3] << endl << endl;
                 for (auto& s : solutions) {
                     file << s << endl;
                 }
@@ -143,9 +152,13 @@ void solve(vector<int>& cards, bool to_file = false) {
             cerr << "Error: " << e.what() << endl;
         }
     } else {
-        for (auto& s : solutions) {
-            cout << s << endl;
-        }
+
+    }
+}
+
+void print_solutions() {
+    for (auto& s : solutions) {
+        cout << s << endl;
     }
 }
 

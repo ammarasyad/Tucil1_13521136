@@ -10,10 +10,10 @@ int main() {
     vector<int> out;
     fill_array(out);
 
-    // Step 2: Ask if user wants to save to file
+    // Step 2: Ask if the user wants to save to file
     bool to_file;
     char dump;
-    cout << "Apakah ingin di save ke file? (y/n): ";
+    cout << "Apakah ingin menyimpan hasil ke file? (y/n): ";
     cin >> dump;
     if (dump == 'y') {
         to_file = true;
@@ -27,8 +27,12 @@ int main() {
     // Step 3: Solve
     auto start = chrono::high_resolution_clock::now();
     solve(out, to_file);
-    auto duration = chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - start);
+    auto duration = chrono::duration<double, milli>(chrono::high_resolution_clock::now() - start);
 
-    cout << "Time taken: " << duration.count() << " milliseconds" << endl;
+    if (!to_file) {
+        print_solutions();
+    }
+
+    cout << "Waktu eksekusi: " << duration.count() << " ms" << endl;
     return 0;
 }
