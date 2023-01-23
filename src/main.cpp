@@ -24,15 +24,18 @@ int main() {
         to_file = false;
     }
 
+    vector<vector<int>> permutations = get_all_permutations(out);
+
     // Step 3: Solve
     auto start = chrono::high_resolution_clock::now();
     solve(out);
     auto duration = chrono::duration<double, milli>(chrono::high_resolution_clock::now() - start);
 
-    if (!to_file) {
+    if (to_file) {
+        save(out, duration);
+    } else {
         print_solutions();
     }
-    save(out, duration);
 
     cout << "Waktu eksekusi: " << duration.count() << " ms" << endl;
     return 0;
