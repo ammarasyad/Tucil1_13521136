@@ -26,12 +26,13 @@ int main() {
 
     // Step 3: Solve
     auto start = chrono::high_resolution_clock::now();
-    solve(out, to_file);
+    solve(out);
     auto duration = chrono::duration<double, milli>(chrono::high_resolution_clock::now() - start);
 
     if (!to_file) {
         print_solutions();
     }
+    save(out, duration);
 
     cout << "Waktu eksekusi: " << duration.count() << " ms" << endl;
     return 0;

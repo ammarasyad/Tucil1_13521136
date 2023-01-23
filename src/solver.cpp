@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <set>
+#include <chrono>
 #include "solver.h"
 
 const vector<char> operators = {'+', '-', '*', '/'};
@@ -35,8 +36,7 @@ float operate(const float& a, const char& op, const float& b) {
  * @param cards The input cards.
  * @param to_file Whether to save the output to a file.
  */
-void solve(vector<int>& cards, bool to_file = false) {
-    int count = 1;
+void solve(vector<int>& cards) {
     vector<vector<int>> permutations = get_all_permutations(cards);
     for (auto& p : operators) {
         for (auto& q : operators) {
@@ -51,79 +51,52 @@ void solve(vector<int>& cards, bool to_file = false) {
                     float result = operate(operate(a, p, b), q, operate(c, r, d));
                     if (result == TARGET) {
                         solutions.insert("(" + to_string(a) + p + to_string(b) + ")" + q + to_string(c) + r + to_string(d));
-//                        cout << count << ". " << "(" << a << p << b << ")" << q << c << r
-//                             << d << endl;
-                        count++;
                     }
                     // a (b c) d
                     result = operate(a, p, operate(operate(b, q, c), r, d));
                     if (result == TARGET) {
                         solutions.insert(to_string(a) + p + "(" + to_string(b) + q + to_string(c) + ")" + r + to_string(d));
-//                        cout << count << ". " << a << p << "(" << b << q << c << ")" << r
-//                             << d << endl;
-                        count++;
                     }
                     // a b (c d)
                     result = operate(a, p, operate(b, q, operate(c, r, d)));
                     if (result == TARGET) {
                         solutions.insert(to_string(a) + p + to_string(b) + q + "(" + to_string(c) + r + to_string(d) + ")");
-//                        cout << count << ". " << a << p << b << q << "(" << c << r << d
-//                             << ")" << endl;
-                        count++;
                     }
-                    // a b c d
-//                    result = operate(perm[0], p, operate(perm[1], q, operate(perm[2], r, perm[3])));
-//                    if (result == TARGET) {
-//                        cout << count << ". " << perm[0] << p << perm[1] << q << perm[2] << r << perm[3] << endl;
-//                        count++;
-//                    }
                     // (a b c) d
                     result = operate(operate(operate(a, p, b), q, c), r, d);
                     if (result == TARGET) {
                         solutions.insert("(" + to_string(a) + p + to_string(b) + q + to_string(c) + ")" + r + to_string(d));
-//                        cout << count << ". " << "(" << a << p << b << q << c << ")" << r
-//                             << d << endl;
-                        count++;
                     }
                     // a (b c d)
                     result = operate(a, p, operate(operate(b, q, c), r, d));
                     if (result == TARGET) {
                         solutions.insert(to_string(a) + p + "(" + to_string(b) + q + to_string(c) + r + to_string(d) + ")");
-//                        cout << count << ". " << a << p << "(" << b << q << c << r << d
-//                             << ")" << endl;
-                        count++;
                     }
                     // (a b) (c d)
                     result = operate(operate(a, p, b), q, operate(c, r, d));
                     if (result == TARGET) {
                         solutions.insert("(" + to_string(a) + p + to_string(b) + ")" + q + "(" + to_string(c) + r + to_string(d) + ")");
-//                        cout << count << ". " << "(" << a << p << b << ")" << q << "(" << c
-//                             << r << d << ")" << endl;
-                        count++;
                     }
                     // ((a b) c) d
                     result = operate(operate(operate(a, p, b), q, c), r, d);
                     if (result == TARGET) {
                         solutions.insert("((" + to_string(a) + p + to_string(b) + ")" + q + to_string(c) + ")" + r + to_string(d));
-//                        cout << count << ". " << "(" << "(" << a << p << b << ")" << q << c
-//                             << ")" << r << d << endl;
-                        count++;
+                    }
+                    // (a (b c)) d
+                    result = operate(operate(a, p, operate(b, q, c)), r, d);
+                    if (result == TARGET) {
+                        solutions.insert("(" + to_string(a) + p + "(" + to_string(b) + q + to_string(c) + "))" + r +
+                                         to_string(d));
                     }
                     // a ((b c) d)
                     result = operate(a, p, operate(operate(b, q, c), r, d));
                     if (result == TARGET) {
                         solutions.insert(to_string(a) + p + "((" + to_string(b) + q + to_string(c) + ")" + r + to_string(d) + ")");
-//                        cout << count << ". " << a << p << "(" << "(" << b << q << c << ")"
-//                             << r << d << ")" << endl;
-                        count++;
                     }
                     // a (b (c d))
                     result = operate(a, p, operate(b, q, operate(c, r, d)));
                     if (result == TARGET) {
-                        solutions.insert(to_string(a) + p + "(" + to_string(b) + q + "(" + to_string(c) + r + to_string(d) + "))");
-//                        cout << count << ". " << a << p << "(" << b << q << "(" << c << r
-//                             << d << ")" << ")" << endl;
-                        count++;
+                        solutions.insert( to_string(a) + p + "(" + to_string(b) + q + "(" + to_string(c) + r + to_string(d) + "))");
                     }
                 }
             }
@@ -131,35 +104,39 @@ void solve(vector<int>& cards, bool to_file = false) {
     }
     if (solutions.empty()) {
         cout << "Tidak ada solusi.";
-        if (to_file) {
-            cout << " Solusi tidak ditulis ke file.";
-        }
         cout << endl;
         return;
-    }
-    if (to_file) {
-        try {
-            ofstream file("solutions.txt");
-            if (file.is_open()) {
-                file << "Untuk input: " << cards[0] << " " << cards[1] << " " << cards[2] << " " << cards[3] << endl << endl;
-                for (auto& s : solutions) {
-                    file << s << endl;
-                }
-                file.close();
-            } else {
-                cout << "File handle tidak bisa dibuka." << endl;
-            }
-        } catch (exception& e) {
-            cerr << "Error: " << e.what() << endl;
-        }
-    } else {
-
     }
 }
 
 void print_solutions() {
     for (auto& s : solutions) {
         cout << s << endl;
+    }
+}
+
+void save(const vector<int>& cards, const chrono::duration<double, milli>& duration) {
+    if (!solutions.empty()) {
+        try {
+            ofstream file("solutions.txt");
+            if (file.is_open()) {
+                file << "Untuk input: " << cards[0] << " " << cards[1] << " " << cards[2] << " " << cards[3] << endl
+                     << endl;
+                file << "Ada " << solutions.size() << " solusi:" << endl;
+                for (auto &s: solutions) {
+                    file << s << endl;
+                }
+                file << endl;
+                file << "Waktu eksekusi: " << duration.count() << " ms" << endl;
+                file.close();
+            } else {
+                cout << "File handle tidak bisa dibuka." << endl;
+            }
+        } catch (const exception &e) {
+            cerr << "Error: " << e.what() << endl;
+        }
+    } else {
+        cout << "Solusi kosong maka tidak akan di simpan ke file." << endl;
     }
 }
 
