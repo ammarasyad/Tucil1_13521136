@@ -1,0 +1,7 @@
+Untuk input: 5 5 5 5
+
+Ada 2 solusi:
+(5*5)-(5/5)
+(5*5)-5/5
+
+Waktu eksekusi: 0.2867 ms
