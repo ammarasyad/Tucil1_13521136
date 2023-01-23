@@ -3,10 +3,11 @@
 //
 
 #include <fstream>
+#include <set>
 #include "solver.h"
 
 const vector<char> operators = {'+', '-', '*', '/'};
-vector<string> solutions;
+set<string> solutions;
 
 /*
  * Evaluates an expression.
@@ -49,7 +50,7 @@ void solve(vector<int>& cards, bool to_file = false) {
                     // (a b) c d
                     float result = operate(operate(a, p, b), q, operate(c, r, d));
                     if (result == TARGET) {
-                        solutions.push_back("(" + to_string(a) + p + to_string(b) + ")" + q + to_string(c) + r + to_string(d));
+                        solutions.insert("(" + to_string(a) + p + to_string(b) + ")" + q + to_string(c) + r + to_string(d));
 //                        cout << count << ". " << "(" << a << p << b << ")" << q << c << r
 //                             << d << endl;
                         count++;
@@ -57,7 +58,7 @@ void solve(vector<int>& cards, bool to_file = false) {
                     // a (b c) d
                     result = operate(a, p, operate(operate(b, q, c), r, d));
                     if (result == TARGET) {
-                        solutions.push_back(to_string(a) + p + "(" + to_string(b) + q + to_string(c) + ")" + r + to_string(d));
+                        solutions.insert(to_string(a) + p + "(" + to_string(b) + q + to_string(c) + ")" + r + to_string(d));
 //                        cout << count << ". " << a << p << "(" << b << q << c << ")" << r
 //                             << d << endl;
                         count++;
@@ -65,7 +66,7 @@ void solve(vector<int>& cards, bool to_file = false) {
                     // a b (c d)
                     result = operate(a, p, operate(b, q, operate(c, r, d)));
                     if (result == TARGET) {
-                        solutions.push_back(to_string(a) + p + to_string(b) + q + "(" + to_string(c) + r + to_string(d) + ")");
+                        solutions.insert(to_string(a) + p + to_string(b) + q + "(" + to_string(c) + r + to_string(d) + ")");
 //                        cout << count << ". " << a << p << b << q << "(" << c << r << d
 //                             << ")" << endl;
                         count++;
@@ -79,7 +80,7 @@ void solve(vector<int>& cards, bool to_file = false) {
                     // (a b c) d
                     result = operate(operate(operate(a, p, b), q, c), r, d);
                     if (result == TARGET) {
-                        solutions.push_back("(" + to_string(a) + p + to_string(b) + q + to_string(c) + ")" + r + to_string(d));
+                        solutions.insert("(" + to_string(a) + p + to_string(b) + q + to_string(c) + ")" + r + to_string(d));
 //                        cout << count << ". " << "(" << a << p << b << q << c << ")" << r
 //                             << d << endl;
                         count++;
@@ -87,7 +88,7 @@ void solve(vector<int>& cards, bool to_file = false) {
                     // a (b c d)
                     result = operate(a, p, operate(operate(b, q, c), r, d));
                     if (result == TARGET) {
-                        solutions.push_back(to_string(a) + p + "(" + to_string(b) + q + to_string(c) + r + to_string(d) + ")");
+                        solutions.insert(to_string(a) + p + "(" + to_string(b) + q + to_string(c) + r + to_string(d) + ")");
 //                        cout << count << ". " << a << p << "(" << b << q << c << r << d
 //                             << ")" << endl;
                         count++;
@@ -95,7 +96,7 @@ void solve(vector<int>& cards, bool to_file = false) {
                     // (a b) (c d)
                     result = operate(operate(a, p, b), q, operate(c, r, d));
                     if (result == TARGET) {
-                        solutions.push_back("(" + to_string(a) + p + to_string(b) + ")" + q + "(" + to_string(c) + r + to_string(d) + ")");
+                        solutions.insert("(" + to_string(a) + p + to_string(b) + ")" + q + "(" + to_string(c) + r + to_string(d) + ")");
 //                        cout << count << ". " << "(" << a << p << b << ")" << q << "(" << c
 //                             << r << d << ")" << endl;
                         count++;
@@ -103,7 +104,7 @@ void solve(vector<int>& cards, bool to_file = false) {
                     // ((a b) c) d
                     result = operate(operate(operate(a, p, b), q, c), r, d);
                     if (result == TARGET) {
-                        solutions.push_back("((" + to_string(a) + p + to_string(b) + ")" + q + to_string(c) + ")" + r + to_string(d));
+                        solutions.insert("((" + to_string(a) + p + to_string(b) + ")" + q + to_string(c) + ")" + r + to_string(d));
 //                        cout << count << ". " << "(" << "(" << a << p << b << ")" << q << c
 //                             << ")" << r << d << endl;
                         count++;
@@ -111,7 +112,7 @@ void solve(vector<int>& cards, bool to_file = false) {
                     // a ((b c) d)
                     result = operate(a, p, operate(operate(b, q, c), r, d));
                     if (result == TARGET) {
-                        solutions.push_back(to_string(a) + p + "((" + to_string(b) + q + to_string(c) + ")" + r + to_string(d) + ")");
+                        solutions.insert(to_string(a) + p + "((" + to_string(b) + q + to_string(c) + ")" + r + to_string(d) + ")");
 //                        cout << count << ". " << a << p << "(" << "(" << b << q << c << ")"
 //                             << r << d << ")" << endl;
                         count++;
@@ -119,7 +120,7 @@ void solve(vector<int>& cards, bool to_file = false) {
                     // a (b (c d))
                     result = operate(a, p, operate(b, q, operate(c, r, d)));
                     if (result == TARGET) {
-                        solutions.push_back(to_string(a) + p + "(" + to_string(b) + q + "(" + to_string(c) + r + to_string(d) + "))");
+                        solutions.insert(to_string(a) + p + "(" + to_string(b) + q + "(" + to_string(c) + r + to_string(d) + "))");
 //                        cout << count << ". " << a << p << "(" << b << q << "(" << c << r
 //                             << d << ")" << ")" << endl;
                         count++;
