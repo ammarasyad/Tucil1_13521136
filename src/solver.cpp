@@ -47,56 +47,30 @@ void solve(vector<int>& cards) {
                     int &c = perm[2];
                     int &d = perm[3];
 
-                    // (a b) c d
-                    float result = operate(operate(a, p, b), q, operate(c, r, d));
-                    if (result == TARGET) {
-                        solutions.insert("(" + to_string(a) + p + to_string(b) + ")" + q + to_string(c) + r + to_string(d));
-                    }
-                    // a (b c) d
-                    result = operate(a, p, operate(operate(b, q, c), r, d));
-                    if (result == TARGET) {
-                        solutions.insert(to_string(a) + p + "(" + to_string(b) + q + to_string(c) + ")" + r + to_string(d));
-                    }
-                    // a b (c d)
-                    result = operate(a, p, operate(b, q, operate(c, r, d)));
-                    if (result == TARGET) {
-                        solutions.insert(to_string(a) + p + to_string(b) + q + "(" + to_string(c) + r + to_string(d) + ")");
-                    }
-                    // (a b c) d
-                    result = operate(operate(operate(a, p, b), q, c), r, d);
-                    if (result == TARGET) {
-                        solutions.insert("(" + to_string(a) + p + to_string(b) + q + to_string(c) + ")" + r + to_string(d));
-                    }
-                    // a (b c d)
-                    result = operate(a, p, operate(operate(b, q, c), r, d));
-                    if (result == TARGET) {
-                        solutions.insert(to_string(a) + p + "(" + to_string(b) + q + to_string(c) + r + to_string(d) + ")");
-                    }
                     // (a b) (c d)
-                    result = operate(operate(a, p, b), q, operate(c, r, d));
-                    if (result == TARGET) {
+                    float result = operate(operate(a, p, b), q, operate(c, r, d));
+                    if (abs(result - TARGET) < 0.0001) {
                         solutions.insert("(" + to_string(a) + p + to_string(b) + ")" + q + "(" + to_string(c) + r + to_string(d) + ")");
                     }
                     // ((a b) c) d
-                    result = operate(operate(operate(a, p, b), q, c), r, d);
-                    if (result == TARGET) {
-                        solutions.insert("((" + to_string(a) + p + to_string(b) + ")" + q + to_string(c) + ")" + r + to_string(d));
+                    result = operate(operate(a, p, q), q, operate(b, r, d));
+                    if (abs(result - TARGET) < 0.0001) {
+                        solutions.insert("((" + to_string(a) + p + to_string(b) + ")" + q + to_string(c) + "))" + r + to_string(d));
                     }
                     // (a (b c)) d
                     result = operate(operate(a, p, operate(b, q, c)), r, d);
-                    if (result == TARGET) {
-                        solutions.insert("(" + to_string(a) + p + "(" + to_string(b) + q + to_string(c) + "))" + r +
-                                         to_string(d));
+                    if (abs(result - TARGET) < 0.0001) {
+                        solutions.insert("(" + to_string(a) + p + "(" + to_string(b) + q + to_string(c) + "))" + r + to_string(d));
                     }
                     // a ((b c) d)
                     result = operate(a, p, operate(operate(b, q, c), r, d));
-                    if (result == TARGET) {
-                        solutions.insert(to_string(a) + p + "((" + to_string(b) + q + to_string(c) + ")" + r + to_string(d) + ")");
+                    if (abs(result - TARGET) < 0.0001) {
+                        solutions.insert(to_string(a) + p + "(" + to_string(b) + q + "(" + to_string(c) + r + to_string(d) + "))");
                     }
                     // a (b (c d))
                     result = operate(a, p, operate(b, q, operate(c, r, d)));
-                    if (result == TARGET) {
-                        solutions.insert( to_string(a) + p + "(" + to_string(b) + q + "(" + to_string(c) + r + to_string(d) + "))");
+                    if (abs(result - TARGET) < 0.0001) {
+                        solutions.insert(to_string(a) + p + "(" + to_string(b) + q + "(" + to_string(c) + r + to_string(d) + "))");
                     }
                 }
             }

@@ -24,8 +24,6 @@ int main() {
         to_file = false;
     }
 
-    vector<vector<int>> permutations = get_all_permutations(out);
-
     // Step 3: Solve
     auto start = chrono::high_resolution_clock::now();
     solve(out);
